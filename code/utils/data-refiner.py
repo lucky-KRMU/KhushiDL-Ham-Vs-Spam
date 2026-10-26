@@ -4,7 +4,7 @@ This is the program to refine and equate the count of spam and ham messages
 
 # importing the necessary module
 import pathlib as pl
-from random import sample
+from random import sample, shuffle
 
 root_path = pl.Path('../../data') # defining the root path
 
@@ -57,3 +57,32 @@ train_spam = (train / "spam").mkdir(exist_ok=True)
 # creating test folder subfolders
 test_ham = (test / "ham").mkdir(exist_ok=True) 
 test_spam = (test / "spam").mkdir(exist_ok=True) 
+
+# we will split the data into 3:1 ratio (train:test)
+
+# shuffling the data
+ham_shuffle = [file for file in (root_path/"ham").iterdir()]
+spam_shuffle = [file for file in (root_path/"spam").iterdir()]
+
+shuffle(ham_shuffle)
+shuffle(spam_shuffle)
+
+k = data_count * .75
+
+# for train data
+for file in ham_shuffle[:k]:
+    file.move((train/"ham"))
+    
+for file in spam_shuffle[:k]:
+    file.move((train/"spam"))
+
+# for test data
+for file in ham_shuffle[k:]:
+    file.move((test/"ham"))
+    
+for file in spam_shuffle[k:]:
+    file.move((test/"spam"))
+
+# removing the ham and spam directories
+(root_path/"ham").rmdir()
+(root_path/"spam").rmdir()
