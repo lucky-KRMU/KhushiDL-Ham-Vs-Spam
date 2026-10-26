@@ -15,12 +15,15 @@ spam_dir = [file for file in (root_path/"spam").iterdir()] # getting the spam me
 ham_count = len(ham_dir)
 spam_count = len(spam_dir)
 del_count = 0
+data_count = 0
 
 # deleting the exccess data
 if ham_count > spam_count:
-    to_del = sample(ham_dir, k=(ham_count-spam_count))
+    data_count = (ham_count-spam_count) # getting the data count ( to be deleted )
 else:
-    to_del = sample(spam_dir, k=(spam_count-ham_count))
+    data_count = (spam_count-ham_count)
+
+to_del = sample(ham_dir, k=data_count) # getting the files to be deleted
 
 # deleting the files
 for file in to_del:
@@ -39,4 +42,18 @@ spam_count = len(spam_dir)
 print("Total Files deleted: {}".format(del_count))
 print("Total Ham files remaining: {}".format(ham_count))
 print("Total Spam files remaining: {}".format(spam_count))
-    
+
+
+# Splitting the data into test and train
+
+# making the directories (train and test)
+train = (root_path / "train").mkdir(exist_ok=True)
+test = (root_path / "test").mkdir(exist_ok=True)
+
+# creating train folder subfolders
+train_ham = (train / "ham").mkdir(exist_ok=True) 
+train_spam = (train / "spam").mkdir(exist_ok=True) 
+
+# creating test folder subfolders
+test_ham = (test / "ham").mkdir(exist_ok=True) 
+test_spam = (test / "spam").mkdir(exist_ok=True) 
