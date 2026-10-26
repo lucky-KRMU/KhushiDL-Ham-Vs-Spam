@@ -18,13 +18,15 @@ spam_count = len(spam_dir)
 del_count = 0
 data_count = 0
 
+
 # deleting the exccess data
 if ham_count > spam_count:
-    data_count = (ham_count-spam_count) # getting the data count ( to be deleted )
+    data_count = spam_count # getting the data count ( to be deleted )
+    to_del = sample(ham_dir, k=(ham_count - spam_count) ) # getting the files to be deleted
 else:
-    data_count = (spam_count-ham_count)
+    data_count = ham_count
+    to_del = sample(spam_dir, k=(spam_count-ham_count)) # getting the files to be deleted
 
-to_del = sample(ham_dir, k=data_count) # getting the files to be deleted
 
 # deleting the files
 for file in to_del:
@@ -72,6 +74,7 @@ shuffle(ham_shuffle)
 shuffle(spam_shuffle)
 
 k = int(data_count * .75)
+print(k)
 file_move = 0
 
 # for train data
@@ -100,6 +103,6 @@ for file in spam_shuffle[k:]:
 print("-"*10)
 print("Files Moved: {}".format(file_move))
 print(f"Total Train Ham: {len([file for file in (train/ "ham").iterdir()])}")
-print(f"Total Train Ham: {len([file for file in (train/ "spam").iterdir()])}")
+print(f"Total Train Spam: {len([file for file in (train/ "spam").iterdir()])}")
 print(f"Total Test Ham: {len([file for file in (test/ "ham").iterdir()])}")
-print(f"Total Test Ham: {len([file for file in (test/ "spam").iterdir()])}")
+print(f"Total Test Spam: {len([file for file in (test/ "spam").iterdir()])}")
